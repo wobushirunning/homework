@@ -3,7 +3,7 @@
     <div class="container content">
       <div class="row row-style">
         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3 col-style">
-          <i class="icon-navicon head-menu"></i>
+          <i class="icon-navicon head-menu" @click="openMenu"></i>
         </div>
         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-6 col-style">
           <span class="logo-style"></span>
@@ -51,7 +51,11 @@ export default {
       menuState: false
     };
   },
-  methods: {}
+  methods: {
+    openMenu() {
+      this.$emit('openMenuEmit')
+    }
+  }
 };
 </script>
 

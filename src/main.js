@@ -4,7 +4,7 @@ import store from "./store";
 
 Vue.config.productionTip = false;
 
-import "./assets/styles/index.css";
+import "./assets/styles/index.less";
 
 new Vue({
   store,
