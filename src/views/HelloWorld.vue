@@ -54,21 +54,21 @@ export default {
     this.getAgents()
   },
   mounted() {
-    const that = this
-    window.onresize = () => {
-      return (() => {
-        that.screenWidth = document.body.clientWidth
-      })()
-    }
+    // const that = this
+    // window.onresize = () => {
+    //   return (() => {
+    //     that.screenWidth = document.body.clientWidth
+    //   })()
+    // }
   },
   watch: {
-    screenWidth (val) {
-      if (val >= 1024) {
-        this.$refs.navShowRef.style.display = "block"
-      } else {
-        this.$refs.navShowRef.style.display = "none"
-      }
-    }
+    // screenWidth (val) {
+    //   if (val >= 1024) {
+    //     this.$refs.navShowRef.style.display = "block"
+    //   } else {
+    //     this.$refs.navShowRef.style.display = "none"
+    //   }
+    // }
   },
   methods: {
     ...mapActions([

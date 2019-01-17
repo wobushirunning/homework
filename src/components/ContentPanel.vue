@@ -101,6 +101,7 @@ export default {
       this.infoData.resources = arr
       this.$emit('editAgents', this.infoData)
       this.addModalShow = false
+      this.addText = ""
     },
     closeModal() {
       this.addModalShow = false
