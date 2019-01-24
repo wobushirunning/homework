@@ -45,23 +45,25 @@ export default {
   props: {
     count: {
       type: Object,
-      default: {
-        building: 0,
-        idle: 0,
-        typeCount: [
-          {
-            name: "ALL",
-            count: 0
-          },
-          {
-            name: "PHYSICAL",
-            count: 0
-          },
-          {
-            name: "VIRTUAL",
-            count: 0
-          }
-        ]
+      default: () => {
+        return {
+          building: 0,
+          idle: 0,
+          typeCount: [
+            {
+              name: "ALL",
+              count: 0
+            },
+            {
+              name: "PHYSICAL",
+              count: 0
+            },
+            {
+              name: "VIRTUAL",
+              count: 0
+            }
+          ]
+        }
       }
     }
   }

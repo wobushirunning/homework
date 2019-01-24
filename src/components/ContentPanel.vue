@@ -29,9 +29,9 @@
             <div class="row">
               <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 bottom-left-style bottom-smlf-style">
                 <div class="list-left">
-                  <i class="icon-plus icon-size-style" style="cursor: pointer;" @click="addModalShow = !addModalShow"></i>
+                  <i class="icon-plus icon-size-style" style="cursor: pointer;" @click.stop="addModalShow = !addModalShow"></i>
                 </div>
-                <div class="modal-box" v-show="addModalShow">
+                <div class="modal-box" v-show="addModalShow" @click.stop="smCloseModal($event)">
                   <div class="modal-box-dialog">
                     <i class="icon-close modal-close-icon" @click="closeModal"></i>
                     <div class="modal-tip">Separate multiple resource name with commas</div>
@@ -69,16 +69,18 @@ export default {
   props: {
     infoData: {
       type: Object,
-      default: {
-        name: "",
-        os: "",
-        status: "",
-        type: "",
-        ip: "",
-        location: "",
-        src: "",
-        resources: [],
-        id: 1
+      default: () => {
+        return {
+          name: "",
+          os: "",
+          status: "",
+          type: "",
+          ip: "",
+          location: "",
+          src: "",
+          resources: [],
+          id: 1
+        };
       }
     }
   },
@@ -86,7 +88,7 @@ export default {
     return {
       addModalShow: false,
       addText: ""
-    }
+    };
   },
   methods: {
     delResources(item) {
@@ -95,18 +97,30 @@ export default {
       this.$emit('editAgents', this.infoData)
     },
     addAffirm() {
-      if (this.addText === '') return
-      let add = this.addText.split(",")
-      let arr = this.infoData.resources.concat(add)
-      this.infoData.resources = arr
-      this.$emit('editAgents', this.infoData)
+      if (this.addText === '') return;
+      let add = this.addText.split(",");
+      let arr = this.infoData.resources.concat(add);
+      this.infoData.resources = arr;
+      this.$emit('editAgents', this.infoData);
+      this.addModalShow = false;
+      this.addText = "";
+    },
+    closeModal() {
+      if (!this.addModalShow) return 
       this.addModalShow = false
       this.addText = ""
     },
-    closeModal() {
-      this.addModalShow = false
-      this.addText = ""
+    smCloseModal(e) {
+      if (e.target.className === 'modal-box') {
+        this.closeModal()
+      }
     }
+  },
+  mounted() {
+    document.addEventListener('click', this.closeModal, false)
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.closeModal)
   }
 }
 </script>
