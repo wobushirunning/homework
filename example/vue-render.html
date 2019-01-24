@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue-Render</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <el-input :name="name" @input="val=>name=val"></el-input>
+    <div>你的名字是{{name}}</div>
+    <ele>
+      <template slot-scope="props">
+        <span>{{props.text}}</span>
+      </template>
+    </ele>
+    <ala></ala>
+    <anchored-heading :level='level'>
+      <div>7777777</div>
+    </anchored-heading>
+    <input type="text" v-focus="123">
+    <div v-demo="{ color: 'white', text: 'hello!' }"></div>
+  </div>
+  <script>
+    // render
+    Vue.component('el-input', {
+      render: function(createElement) {
+        // let self = this
+        // console.log('---', this)
+        return createElement('input',{
+          domProps: {
+            value: this.name
+          },
+          on: {
+            input: (event) => {
+              console.log(this)
+              this.$emit('input', event.target.value)
+            }
+          }
+        })
+      },
+      props: {
+        name: String
+      }
+    })
+    
+    Vue.component('ele', {
+      render: function(createElement) {
+        // console.log(this, 'ele')
+        return createElement('div', [
+          this.$scopedSlots.default({
+            text: this.msg
+          })
+        ])
+      },
+      data: function() {
+        return {
+          msg: '来自子组件'
+        }
+      }
+    })
+
+    Vue.component('ala', {
+      render: function(createElement) {
+        return createElement('div', [
+          createElement('child', {
+            scopedSlots: {
+              default: function(props) {
+                return [
+                  createElement('div', '来自父组件'),
+                  createElement('div', props.text)
+                ]
+              }
+            }
+          })
+        ])
+      }
+    })
+
+    Vue.component('child', {
+      render: function(createElement) {
+        return createElement('b', this.$scopedSlots.default({text: '我是子组件'}))
+      }
+    })
+
+    Vue.component('anchored-heading', {
+      render: function(createElement) {
+        return createElement(
+          'h' + this.level,
+          this.$slots.default
+        )
+      },
+      props: {
+        level: {
+          type: Number,
+          required: true
+        }
+      }
+    })
+
+    /**
+     * directive
+     * 指令对象提供的钩子函数：
+     * bind: 只调用一次，指令第一次绑定到元素时调用。
+     * inserted: 被绑定元素插入父节点是调用。
+     * update: 所在组件的 VNode(虚拟节点) 更新时调用，
+     *         但是可能发生在其子 VNode 更新之前。指令
+     *         的值可能发生了改变，也可能没有。
+     * componentUpdated: 指令所在组件的VNode及其子VNode全部更新后调用。
+     * unbind: 只调用一次，指令与元素解绑时调用。
+     * 
+     * */
+    Vue.directive('focus', {
+      inserted: function (el, binding, vnode, oldVnode) {
+        console.log(el, binding, vnode, oldVnode)
+        el.focus()
+      }
+    })
+
+    Vue.directive('demo', {
+      bind: function(el, binding, vnode) {
+        console.log(binding)
+        var s = JSON.stringify
+        el.innerHTML = 
+          'name: '       + s(binding.name) + '<br>' +
+          'value: '      + s(binding.value) + '<br>' +
+          'rawName: '    + s(binding.rawName) + '<br>' +
+          'expression: ' + s(binding.expression) + '<br>' +
+          'argument: '   + s(binding.arg) + '<br>' +
+          'modifiers: '  + s(binding.modifiers) + '<br>' +
+          'vnode keys: ' + Object.keys(vnode).join(', ')
+      }
+    })
+
+    new Vue({
+      el: '#app',
+      data: {
+        name: 'hdl',
+        level: 1,
+        message: 'hello!'
+      }
+    })
+  </script>
+</body>
+</html>
